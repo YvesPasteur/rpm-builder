@@ -51,7 +51,7 @@ fi
 if ! type -P php &>/dev/null; then
   echo "Début compilation"
   cd php-5.5.3
-  ./configure --with-apxs2=/usr/bin/apxs --with-mysql --with-gd --with-curl --with-zlib --enable-mbstring --with-mysqli >> $logs_destination/php.log 2>&1
+  ./configure --with-apxs2=/usr/bin/apxs --with-openssl --enable-zip --with-gd --with-curl --with-zlib --enable-mbstring --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd >> $logs_destination/php.log 2>&1
   error_handler $? "Probleme au configure"
   echo "configure OK"
   make >> $logs_destination/php.log 2>&1
