@@ -48,7 +48,7 @@ rpmbuild --quiet --rebuild distcache-1.4.5-23.src.rpm >> $logs_destination/distc
 error_handler $? "Erreur pour construire le rpm de distcache, voir le fichier de log"
 echo "rpmbuild distacache OK"
 
-rpm -ih --quiet $rpm_location/distcache-1.4.5-23.x86_64.rpm $rpm_location/distcache-devel-1.4.5-23.x86_64.rpm >> $logs_destination/distcache.log 2>&1
+yum install -y -q $rpm_location/distcache-1.4.5-23.x86_64.rpm $rpm_location/distcache-devel-1.4.5-23.x86_64.rpm >> $logs_destination/distcache.log 2>&1
 error_handler $? "Erreur pour installer les rpm de distcache, voir le fichier de log"
 
 echo "distcache OK"
@@ -65,7 +65,7 @@ wget -q http://wwwftp.ciril.fr/pub/apache/apr/apr-util-1.5.2.tar.bz2
 error_handler $? "Probleme de recuperation des sources de apr-util"
 echo "recuperation sources de apr-util OK"
 
-yum install -y -q doxygen >> $logs_destination/apr.log 2>&1 
+yum install -y -q doxygen >> $logs_destination/apr.log 2>&1
 echo "installation de doxygen OK"
 
 if [ ! -f $rpm_location/apr-1.4.8-1.x86_64.rpm ]; then
@@ -76,11 +76,11 @@ else
   echo "RPM de apr existe deja, pas de construction"
 fi
 
-rpm -ih --quiet $rpm_location/apr-1.4.8-1.x86_64.rpm $rpm_location/apr-devel-1.4.8-1.x86_64.rpm >> $logs_destination/apr.log 2>&1 
+yum install -y -q $rpm_location/apr-1.4.8-1.x86_64.rpm $rpm_location/apr-devel-1.4.8-1.x86_64.rpm >> $logs_destination/apr.log 2>&1
 error_handler $? "Erreur pour installer les rpm de apr, voir le fichier de log"
 echo "installation apr OK"
 
-yum install -y -q expat-devel libuuid-devel db4-devel postgresql-devel mysql-devel sqlite-devel unixODBC-devel openldap-devel nss-devel >> $logs_destination/apr.log 2>&1 
+yum install -y -q expat-devel libuuid-devel db4-devel postgresql-devel mysql-devel sqlite-devel unixODBC-devel openldap-devel nss-devel >> $logs_destination/apr.log 2>&1
 error_handler $? "Erreur pour installer les packages necessaires pour apr, voir le fichier de log"
 echo "installation packages necessaires pour apr OK"
 
@@ -89,11 +89,11 @@ wget -q http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rp
 error_handler $? "Probleme de recuperation du rpm de epel"
 echo "recuperation rpm de EPEL OK"
 
-rpm -U --quiet epel-release-6-8.noarch.rpm >> $logs_destination/apr.log 2>&1 
+yum install -y -q epel-release-6-8.noarch.rpm >> $logs_destination/apr.log 2>&1
 error_handler $? "Erreur pour installer EPEL, voir le fichier de log"
 echo "installation EPEL OK"
 
-yum install -y -q freetds-devel >> $logs_destination/apr.log 2>&1 
+yum install -y -q freetds-devel >> $logs_destination/apr.log 2>&1
 error_handler $? "Erreur pour installer freetds-devel, voir le fichier de log"
 echo "Installation freetds-devel OK"
 
@@ -107,7 +107,7 @@ else
   echo "RPM de apr-util existe deja, pas de construction"
 fi
 
-rpm -ih --quiet $rpm_location/apr-util-1.5.2-1.x86_64.rpm $rpm_location/apr-util-devel-1.5.2-1.x86_64.rpm >> $logs_destination/apr.log 2>&1 
+yum install -y -q $rpm_location/apr-util-1.5.2-1.x86_64.rpm $rpm_location/apr-util-devel-1.5.2-1.x86_64.rpm >> $logs_destination/apr.log 2>&1
 error_handler $? "Erreur pour installer apr-util, voir le fichier de log"
 echo "installation rpm de apr OK"
 
@@ -131,27 +131,27 @@ error_handler $? "Probleme pour archiver les sources de httpd"
 bzip2 httpd-2.4.6.tar
 error_handler $? "Probleme pour compresser les sources de httpd"
 
-yum install -y -q pcre-devel lua-devel libxml2-devel >> $logs_destination/httpd.log 2>&1 
+yum install -y -q pcre-devel lua-devel libxml2-devel >> $logs_destination/httpd.log 2>&1
 error_handler $? "Erreur pour installer les packages necessaires pour httpd, voir le fichier de log"
 echo "installation packages necessaires pour httpd OK"
 
 if [ ! -f $rpm_location/httpd-2.4.6-1.x86_64.rpm ]; then
-  rpmbuild --quiet -tb httpd-2.4.6.tar.bz2 >> $logs_destination/httpd.log 2>&1 
+  rpmbuild --quiet -tb httpd-2.4.6.tar.bz2 >> $logs_destination/httpd.log 2>&1
   error_handler $? "Erreur pour construire les rpm de httpd, voir le fichier de log"
   echo "construction rpm de httpd OK"
 else
   echo "rpm de httpd existe déjà, pas de construction"
 fi
 
-yum install -y -q mailcap >> $logs_destination/httpd.log 2>&1 
+yum install -y -q mailcap >> $logs_destination/httpd.log 2>&1
 error_handler $? "Erreur pour installer mailcap, voir le fichier de log"
 echo "installation de mailcap OK"
 
-rpm -ih --quiet $rpm_location/httpd-2.4.6-1.x86_64.rpm >> $logs_destination/httpd.log 2>&1 
+yum install -y -q $rpm_location/httpd-2.4.6-1.x86_64.rpm >> $logs_destination/httpd.log 2>&1
 error_handler $? "Erreur pour installer httpd, voir le fichier de log"
 echo "installation de httpd OK"
 
-rpm -ih --quiet $rpm_location/httpd-devel-2.4.6-1.x86_64.rpm >> $logs_destination/httpd.log 2>&1 
+yum install -y -q $rpm_location/httpd-devel-2.4.6-1.x86_64.rpm >> $logs_destination/httpd.log 2>&1
 error_handler $? "Erreur pour installer httpd-devel, voir le fichier de log"
 echo "installation de httpd-devel OK"
 
