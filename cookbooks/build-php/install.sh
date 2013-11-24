@@ -31,7 +31,7 @@ fi
 echo "initialisation structure rpmbuild OK"
 
 # installation des packages requis 
-yum install -q -y libxml2-devel curl-devel libpng-devel >> $logs_destination/php.log 2>&1
+yum install -q -y libxml2-devel curl-devel libpng-devel mcrypt.x86_64 libmcrypt-devel.x86_64 >> $logs_destination/php.log 2>&1
 error_handler $? "Probleme de recuperation des packages necessaires pour compiler PHP"
 
 # préparation des sources de PHP
@@ -51,7 +51,7 @@ fi
 if ! type -P php &>/dev/null; then
   echo "Début compilation"
   cd php-5.5.3
-  ./configure --with-apxs2=/usr/bin/apxs --with-openssl --enable-zip --with-gd --with-curl --with-zlib --enable-mbstring --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd >> $logs_destination/php.log 2>&1
+  ./configure --with-apxs2=/usr/bin/apxs --with-openssl --enable-zip --with-gd --with-curl --with-zlib --enable-mbstring --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-mcrypt=/usr/bin/mcrypt >> $logs_destination/php.log 2>&1
   error_handler $? "Probleme au configure"
   echo "configure OK"
   make >> $logs_destination/php.log 2>&1
@@ -79,7 +79,8 @@ fi
 mkdir -p $rpm_destination
 cp $rpm_location/php-1_x86_64.rpm $rpm_destination
 
-
+# mcrypt
+cp /usr/lib64/libmcrypt.so $rpm_destination 
 
 d=`date`
 echo "$d - Fin de Construction RPM de PHP"
