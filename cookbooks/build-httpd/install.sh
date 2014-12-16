@@ -70,7 +70,7 @@ yum install -y -q doxygen >> $logs_destination/apr.log 2>&1
 echo "installation de doxygen OK"
 
 if [ ! -f $rpm_location/apr-1.5.1-1.x86_64.rpm ]; then
-  rpmbuild --quiet -tb apr-1.5.1.tar.bz2 >> $logs_destination/apr.log 2>&1
+  rpmbuild --quiet -ta apr-1.5.1.tar.bz2 >> $logs_destination/apr.log 2>&1
   error_handler $? "Erreur pour construire le rpm de apr, voir le fichier de log"
   echo "construction rpm de apr OK"
 else
@@ -101,7 +101,7 @@ echo "Installation freetds-devel OK"
 rm epel-release-6-8.noarch.rpm
 
 if [ ! -f $rpm_location/apr-util-1.5.4-1.x86_64.rpm ]; then
-  rpmbuild --quiet -tb apr-util-1.5.4.tar.bz2 >> $logs_destination/apr.log 2>&1
+  rpmbuild --quiet -ta apr-util-1.5.4.tar.bz2 >> $logs_destination/apr.log 2>&1
   error_handler $? "Erreur pour construire les rpm d'apr-util, voir le fichier de log"
   echo "construction rpm apr-util OK"
 else
@@ -133,7 +133,7 @@ error_handler $? "Erreur pour installer les packages necessaires pour httpd, voi
 echo "installation packages necessaires pour httpd OK"
 
 if [ ! -f $rpm_location/httpd-2.4.10-1.x86_64.rpm ]; then
-  rpmbuild --quiet -tb httpd-2.4.10.tar.bz2 >> $logs_destination/httpd.log 2>&1
+  rpmbuild --quiet -ta httpd-2.4.10.tar.bz2 >> $logs_destination/httpd.log 2>&1
   error_handler $? "Erreur pour construire les rpm de httpd, voir le fichier de log"
   echo "construction rpm de httpd OK"
 else
