@@ -36,8 +36,9 @@ echo "initialisation structure rpmbuild OK"
 cd $workspace/SRPMS/
 
 echo "Début distache"
+yum -q -y update
 
-yum install -q -y libtool
+yum install -q -y libtool openssl-devel
 error_handler $? "Probleme d'installation de libtool"
 echo "libtool OK"
 
@@ -48,7 +49,7 @@ rpmbuild --quiet --rebuild distcache-1.4.5-23.src.rpm >> $logs_destination/distc
 error_handler $? "Erreur pour construire le rpm de distcache, voir le fichier de log"
 echo "rpmbuild distacache OK"
 
-yum install -y -q $rpm_location/distcache-1.4.5-23.x86_64.rpm $rpm_location/distcache-devel-1.4.5-23.x86_64.rpm >> $logs_destination/distcache.log 2>&1
+yum install -y -q $rpm_location/* >> $logs_destination/distcache.log 2>&1
 error_handler $? "Erreur pour installer les rpm de distcache, voir le fichier de log"
 
 echo "distcache OK"
@@ -57,26 +58,26 @@ echo "distcache OK"
 ###
 cd $workspace/SOURCES/
 
-wget -q http://wwwftp.ciril.fr/pub/apache/apr/apr-1.4.8.tar.bz2
+wget -q http://mir2.ovh.net/ftp.apache.org/dist/apr/apr-1.5.1.tar.bz2
 error_handler $? "Probleme de recuperation des sources de apr"
 echo "recuperation sources de apr OK"
 
-wget -q http://wwwftp.ciril.fr/pub/apache/apr/apr-util-1.5.2.tar.bz2
+wget -q http://mir2.ovh.net/ftp.apache.org/dist/apr/apr-util-1.5.4.tar.bz2
 error_handler $? "Probleme de recuperation des sources de apr-util"
 echo "recuperation sources de apr-util OK"
 
 yum install -y -q doxygen >> $logs_destination/apr.log 2>&1
 echo "installation de doxygen OK"
 
-if [ ! -f $rpm_location/apr-1.4.8-1.x86_64.rpm ]; then
-  rpmbuild --quiet -tb apr-1.4.8.tar.bz2 >> $logs_destination/apr.log 2>&1
+if [ ! -f $rpm_location/apr-1.5.1-1.x86_64.rpm ]; then
+  rpmbuild --quiet -tb apr-1.5.1.tar.bz2 >> $logs_destination/apr.log 2>&1
   error_handler $? "Erreur pour construire le rpm de apr, voir le fichier de log"
   echo "construction rpm de apr OK"
 else
   echo "RPM de apr existe deja, pas de construction"
 fi
 
-yum install -y -q $rpm_location/apr-1.4.8-1.x86_64.rpm $rpm_location/apr-devel-1.4.8-1.x86_64.rpm >> $logs_destination/apr.log 2>&1
+yum install -y -q $rpm_location/* >> $logs_destination/apr.log 2>&1
 error_handler $? "Erreur pour installer les rpm de apr, voir le fichier de log"
 echo "installation apr OK"
 
@@ -99,15 +100,15 @@ echo "Installation freetds-devel OK"
 
 rm epel-release-6-8.noarch.rpm
 
-if [ ! -f $rpm_location/apr-util-1.5.2-1.x86_64.rpm ]; then
-  rpmbuild --quiet -tb apr-util-1.5.2.tar.bz2 >> $logs_destination/apr.log 2>&1
+if [ ! -f $rpm_location/apr-util-1.5.4-1.x86_64.rpm ]; then
+  rpmbuild --quiet -tb apr-util-1.5.4.tar.bz2 >> $logs_destination/apr.log 2>&1
   error_handler $? "Erreur pour construire les rpm d'apr-util, voir le fichier de log"
   echo "construction rpm apr-util OK"
 else
   echo "RPM de apr-util existe deja, pas de construction"
 fi
 
-yum install -y -q $rpm_location/apr-util-1.5.2-1.x86_64.rpm $rpm_location/apr-util-devel-1.5.2-1.x86_64.rpm >> $logs_destination/apr.log 2>&1
+yum install -y -q $rpm_location/* >> $logs_destination/apr.log 2>&1
 error_handler $? "Erreur pour installer apr-util, voir le fichier de log"
 echo "installation rpm de apr OK"
 
@@ -116,27 +117,23 @@ echo "installation rpm de apr OK"
 ###
 cd $workspace/SOURCES/
 
-wget -q http://wwwftp.ciril.fr/pub/apache/httpd/httpd-2.4.6.tar.bz2
+wget -q http://mir2.ovh.net/ftp.apache.org/dist/httpd/httpd-2.4.10.tar.bz2
 error_handler $? "Probleme de recuperation des sources de httpd"
 echo "recuperation sources httpd OK"
 
-bunzip2 httpd-2.4.6.tar.bz2
+tar -xvf httpd-2.4.10.tar.bz2
 error_handler $? "Probleme pour decompresser les sources de httpd"
-tar xf httpd-2.4.6.tar
-error_handler $? "Probleme pour desarchiver les sources de httpd"
-sed -i '/modules\/mod_watchdog.so/a %{_libdir}/httpd/modules/mod_proxy_wstunnel.so' httpd-2.4.6/httpd.spec
-sed -i 's/\(--enable-case-filter --enable-case-filter-in \\\)/\1\n\t--enable-so \\/' httpd-2.4.6/httpd.spec
-tar -cf httpd-2.4.6.tar httpd-2.4.6
+sed -i '/modules\/mod_watchdog.so/a %{_libdir}/httpd/modules/mod_proxy_wstunnel.so' httpd-2.4.10/httpd.spec
+sed -i 's/\(--enable-case-filter --enable-case-filter-in \\\)/\1\n\t--enable-so \\/' httpd-2.4.10/httpd.spec
+tar -cf httpd-2.4.10.tar.bz2 httpd-2.4.10
 error_handler $? "Probleme pour archiver les sources de httpd"
-bzip2 httpd-2.4.6.tar
-error_handler $? "Probleme pour compresser les sources de httpd"
 
 yum install -y -q pcre-devel lua-devel libxml2-devel >> $logs_destination/httpd.log 2>&1
 error_handler $? "Erreur pour installer les packages necessaires pour httpd, voir le fichier de log"
 echo "installation packages necessaires pour httpd OK"
 
-if [ ! -f $rpm_location/httpd-2.4.6-1.x86_64.rpm ]; then
-  rpmbuild --quiet -tb httpd-2.4.6.tar.bz2 >> $logs_destination/httpd.log 2>&1
+if [ ! -f $rpm_location/httpd-2.4.10-1.x86_64.rpm ]; then
+  rpmbuild --quiet -tb httpd-2.4.10.tar.bz2 >> $logs_destination/httpd.log 2>&1
   error_handler $? "Erreur pour construire les rpm de httpd, voir le fichier de log"
   echo "construction rpm de httpd OK"
 else
@@ -147,23 +144,17 @@ yum install -y -q mailcap >> $logs_destination/httpd.log 2>&1
 error_handler $? "Erreur pour installer mailcap, voir le fichier de log"
 echo "installation de mailcap OK"
 
-yum install -y -q $rpm_location/httpd-2.4.6-1.x86_64.rpm >> $logs_destination/httpd.log 2>&1
+yum install -y -q $rpm_location/*>> $logs_destination/httpd.log 2>&1
 error_handler $? "Erreur pour installer httpd, voir le fichier de log"
 echo "installation de httpd OK"
-
-yum install -y -q $rpm_location/httpd-devel-2.4.6-1.x86_64.rpm >> $logs_destination/httpd.log 2>&1
-error_handler $? "Erreur pour installer httpd-devel, voir le fichier de log"
-echo "installation de httpd-devel OK"
 
 ###
 # on copie les rpms en dehors de la VM pour les recuperer sur la machine hote
 ###
 mkdir -p $rpm_destination
 
-cp $rpm_location/httpd-2.4.6-1.x86_64.rpm $rpm_destination
-cp $rpm_location/httpd-devel-2.4.6-1.x86_64.rpm $rpm_destination
-cp $rpm_location/apr-util-1.5.2-1.x86_64.rpm $rpm_destination
-cp $rpm_location/apr-1.4.8-1.x86_64.rpm $rpm_destination
+cp $rpm_location/* $rpm_destination
+cp $workspace/SOURCES/* $rpm_destination
 
 
 d=`date`
